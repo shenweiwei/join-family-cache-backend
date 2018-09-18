@@ -1,0 +1,14 @@
+server:
+  servlet:
+    context-path: /jf/cache
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+    port: '5672'
+    publisher-confirms: 'true'
+    publisher-returns: 'true'
+    template:
+      mandatory: 'true'
+
