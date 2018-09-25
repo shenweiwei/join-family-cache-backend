@@ -6,7 +6,7 @@
 	<groupId>org.sww</groupId>
 	<artifactId>jfcache</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>jfcache</name>
 	<description>picture backend</description>
@@ -63,14 +63,62 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+	    <profile>
+	        <!-- 本地开发环境 -->
+	        <id>dev</id>
+	        <properties>
+	            <profiles.active>dev</profiles.active>
+	        </properties>
+	        <activation>
+	            <!-- 设置默认激活这个配置 -->
+	            <activeByDefault>true</activeByDefault>
+	        </activation>
+	    </profile>
+	    <profile>
+	        <!-- 测试环境 -->
+	        <id>qa</id>
+	        <properties>
+	            <profiles.active>qa</profiles.active>
+	        </properties>
+	    </profile>
+	    <profile>
+	        <!-- 生产环境 -->
+	        <id>prod</id>
+	        <properties>
+	            <profiles.active>prod</profiles.active>
+	        </properties>
+	    </profile>
+	</profiles>
+	
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
-
 
 </project>
