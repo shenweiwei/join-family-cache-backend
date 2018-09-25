@@ -21,8 +21,8 @@ public class FileController {
 	private FileManager fileManager;
 	
 	@PostMapping("/upload")
-	public void upload(@RequestParam("file") MultipartFile file, @RequestParam("type") String fileType) {
-		fileManager.upload(file,fileType);
+	public void upload(@RequestParam("file") MultipartFile file) {
+		fileManager.upload(file);
 	}
 	
 }

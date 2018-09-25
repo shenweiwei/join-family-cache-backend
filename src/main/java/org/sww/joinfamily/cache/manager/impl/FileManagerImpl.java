@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.sww.joinfamily.cache.constants.FileTypeConstant;
-import org.sww.joinfamily.cache.exception.BusinessException;
 import org.sww.joinfamily.cache.manager.FileManager;
 import org.sww.joinfamily.cache.service.FileService;
 
@@ -16,17 +15,19 @@ public class FileManagerImpl implements FileManager {
 	private FileService fileService;
 
 	@Override
-	public void upload(MultipartFile file, String fileType) throws BusinessException, ValidationException {
+	public void upload(MultipartFile file) {
+		String fileName = file.getOriginalFilename();
+		String fileType = fileName.substring(fileName.indexOf("."), fileName.length());
 		switch (fileType) {
 			case FileTypeConstant.PNG:
 				this.uploadPicture(file, fileType);
 				break;
 			default:
-				break;
+				throw new ValidationException("file type not support upload");
 		}
 	}
-	private void uploadPicture(MultipartFile file, String fileType) throws BusinessException, ValidationException {
-		fileService.saveToLocal(file, fileType);
-		fileService.saveToRedis();
+	private void uploadPicture(MultipartFile file, String fileType) {
+		String filePath = fileService.saveToLocal(file, fileType);
+		fileService.saveToRedis(file, fileType, filePath);
 	}
 }

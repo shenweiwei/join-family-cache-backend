@@ -15,13 +15,15 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.0.4.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<commons-lang3.version>3.8.1</commons-lang3.version>
+		<commons-io.version>2.6</commons-io.version>
 	</properties>
 
 	<dependencies>
@@ -33,7 +35,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
-		<!--spring2.0集成redis所需common-pool2-->
+		<!--spring2.0集成redis所需common-pool2 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-pool2</artifactId>
@@ -61,36 +63,42 @@
 			<artifactId>spring-restdocs-mockmvc</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>${commons-io.version}</version>
+		</dependency>
+		
 	</dependencies>
 
 	<profiles>
-	    <profile>
-	        <!-- 本地开发环境 -->
-	        <id>dev</id>
-	        <properties>
-	            <profiles.active>dev</profiles.active>
-	        </properties>
-	        <activation>
-	            <!-- 设置默认激活这个配置 -->
-	            <activeByDefault>true</activeByDefault>
-	        </activation>
-	    </profile>
-	    <profile>
-	        <!-- 测试环境 -->
-	        <id>qa</id>
-	        <properties>
-	            <profiles.active>qa</profiles.active>
-	        </properties>
-	    </profile>
-	    <profile>
-	        <!-- 生产环境 -->
-	        <id>prod</id>
-	        <properties>
-	            <profiles.active>prod</profiles.active>
-	        </properties>
-	    </profile>
+		<profile>
+			<!-- 本地开发环境 -->
+			<id>dev</id>
+			<properties>
+				<profiles.active>dev</profiles.active>
+			</properties>
+			<activation>
+				<!-- 设置默认激活这个配置 -->
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<!-- 测试环境 -->
+			<id>qa</id>
+			<properties>
+				<profiles.active>qa</profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<!-- 生产环境 -->
+			<id>prod</id>
+			<properties>
+				<profiles.active>prod</profiles.active>
+			</properties>
+		</profile>
 	</profiles>
-	
+
 	<build>
 		<plugins>
 			<plugin>

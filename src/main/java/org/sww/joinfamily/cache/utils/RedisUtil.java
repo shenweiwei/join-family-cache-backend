@@ -1,5 +1,6 @@
 package org.sww.joinfamily.cache.utils;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +15,7 @@ import org.springframework.util.CollectionUtils;
 public class RedisUtil {
 	
 	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;  
+	private RedisTemplate<String, Serializable> redisTemplate;  
 
 	//=============================common============================  
     /** 
@@ -89,7 +90,7 @@ public class RedisUtil {
      * @param value 值 
      * @return true成功 false失败 
      */  
-    public boolean set(String key,Object value) {  
+    public boolean set(String key,Serializable value) {  
          try {  
             redisTemplate.opsForValue().set(key, value);  
             return true;  
@@ -107,7 +108,7 @@ public class RedisUtil {
      * @param time 时间(秒) time要大于0 如果time小于等于0 将设置无限期 
      * @return true成功 false 失败 
      */  
-    public boolean set(String key,Object value,long time){  
+    public boolean set(String key,Serializable value,long time){  
         try {  
             if(time>0){  
                 redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);  
@@ -288,7 +289,7 @@ public class RedisUtil {
      * @param key 键 
      * @return 
      */  
-    public Set<Object> sGet(String key){  
+    public Set<Serializable> sGet(String key){  
         try {  
             return redisTemplate.opsForSet().members(key);  
         } catch (Exception e) {  
@@ -383,7 +384,7 @@ public class RedisUtil {
      * @param end 结束  0 到 -1代表所有值 
      * @return 
      */  
-    public List<Object> lGet(String key,long start, long end){  
+    public List<Serializable> lGet(String key,long start, long end){  
         try {  
             return redisTemplate.opsForList().range(key, start, end);  
         } catch (Exception e) {  
@@ -428,7 +429,7 @@ public class RedisUtil {
      * @param time 时间(秒) 
      * @return 
      */  
-    public boolean lSet(String key, Object value) {  
+    public boolean lSet(String key, Serializable value) {  
         try {  
             redisTemplate.opsForList().rightPush(key, value);  
             return true;  
@@ -445,7 +446,7 @@ public class RedisUtil {
      * @param time 时间(秒) 
      * @return 
      */  
-    public boolean lSet(String key, Object value, long time) {  
+    public boolean lSet(String key, Serializable value, long time) {  
         try {  
             redisTemplate.opsForList().rightPush(key, value);  
             if (time > 0) expire(key, time);  
@@ -463,7 +464,7 @@ public class RedisUtil {
      * @param time 时间(秒) 
      * @return 
      */  
-    public boolean lSet(String key, List<Object> value) {  
+    public boolean lSet(String key, List<Serializable> value) {  
         try {  
             redisTemplate.opsForList().rightPushAll(key, value);  
             return true;  
@@ -480,7 +481,7 @@ public class RedisUtil {
      * @param time 时间(秒) 
      * @return 
      */  
-    public boolean lSet(String key, List<Object> value, long time) {  
+    public boolean lSet(String key, List<Serializable> value, long time) {  
         try {  
             redisTemplate.opsForList().rightPushAll(key, value);  
             if (time > 0) expire(key, time);  
@@ -498,7 +499,7 @@ public class RedisUtil {
      * @param value 值 
      * @return 
      */  
-    public boolean lUpdateIndex(String key, long index,Object value) {  
+    public boolean lUpdateIndex(String key, long index,Serializable value) {  
         try {  
             redisTemplate.opsForList().set(key, index, value);  
             return true;  
