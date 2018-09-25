@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class ControllerAspect {
 	protected static final Logger logger = LoggerFactory.getLogger(ControllerAspect.class);
 
-	@Pointcut("execution(public * org.sww.joinfamily.cache..*.*(...)) && "
+	@Pointcut("execution(public * org.sww.joinfamily.cache..*.*(..)) && "
 			+ "@within(org.springframework.web.bind.annotation.RestController)")
 	public void processApi() {
 		throw new UnsupportedOperationException();
