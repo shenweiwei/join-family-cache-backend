@@ -2,6 +2,8 @@ package org.sww.joinfamily.cache.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -39,14 +41,22 @@ public class FileServiceImpl implements FileService {
 	
 	@Override
 	public void savePictureToRedis(MultipartFile file, String fileType, String filePath) {
-		long result = redisUtil.sSet(RedisConstant.PICTURE_UNSAVED_CACHEED_SET, filePath);
+		long result = redisUtil.sSet(RedisConstant.PICTURE_UNSAVED_SET, filePath);
 		if (result <= 0)
 			throw new RedisException("INSERT TO REDIS ERROR");
 	}
 	
 	@Override
 	public void saveToDB() {
-		// TODO Auto-generated method stub
+		Set<Serializable> unSavedSet = redisUtil.sGet(RedisConstant.PICTURE_UNSAVED_SET);
+		
+		for (Serializable serializable : unSavedSet) {
+			//TODO SAVE TO DB
+			
+			long result = redisUtil.setRemove(serializable.toString());
+		}
+		
+		
 	}
 
 
