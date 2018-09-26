@@ -5,11 +5,11 @@
 	<!-- debug ouput -->
 	<appender name="DEBUG"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>E:/logs/${logName}-debug.log</file>
+		<file>D:/logs/${logName}-debug.log</file>
 		<append>true</append>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>E:/logs/${logName}-%d{yyyy-MM-dd}-debug.%i.log.zip
+			<fileNamePattern>D:/logs/${logName}-%d{yyyy-MM-dd}-debug.%i.log.zip
 			</fileNamePattern>
 			<maxFileSize>100MB</maxFileSize>
 			<maxHistory>7</maxHistory>
@@ -28,11 +28,11 @@
 	<!-- info ouput -->
 	<appender name="INFO"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>E:/logs/${logName}-info.log</file>
+		<file>D:/logs/${logName}-info.log</file>
 		<append>true</append>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>E:/logs/${logName}-%d{yyyy-MM-dd}-info.%i.log.zip
+			<fileNamePattern>D:/logs/${logName}-%d{yyyy-MM-dd}-info.%i.log.zip
 			</fileNamePattern>
 			<maxFileSize>100MB</maxFileSize>
 			<maxHistory>7</maxHistory>
@@ -51,11 +51,11 @@
 	<!-- error ouput -->
 	<appender name="ERROR"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>E:/logs/${logName}-error.log</file>
+		<file>D:/logs/${logName}-error.log</file>
 		<append>true</append>
 		<rollingPolicy
 			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<fileNamePattern>E:/logs/${logName}-%d{yyyy-MM-dd}-error.%i.log.zip
+			<fileNamePattern>D:/logs/${logName}-%d{yyyy-MM-dd}-error.%i.log.zip
 			</fileNamePattern>
 			<maxFileSize>100MB</maxFileSize>
 			<maxHistory>7</maxHistory>

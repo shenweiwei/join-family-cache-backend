@@ -13,11 +13,24 @@ public class SystemUtil {
 
 	public String getFilePathBySysEnv() {
 		String osName = System.getProperties().getProperty("os.name");
+		String filePath = "/".concat(SystemConstant.FILE.toLowerCase());
+		
 		switch (osName) {
 			case SystemConstant.LINUX_SYS:
-				return linux;
+				return linux.concat(filePath);
 			default:
-				return windows;
+				return windows.concat(filePath);
+		}
+	}
+	public String getPicturePathBySysEnv() {
+		String osName = System.getProperties().getProperty("os.name");
+		String filePath = "/".concat(SystemConstant.PICTURE.toLowerCase());
+		
+		switch (osName) {
+			case SystemConstant.LINUX_SYS:
+				return linux.concat(filePath);
+			default:
+				return windows.concat(filePath);
 		}
 	}
 }

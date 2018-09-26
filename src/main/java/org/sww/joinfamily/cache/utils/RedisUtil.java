@@ -326,7 +326,22 @@ public class RedisUtil {
             e.printStackTrace();  
             return 0;  
         }  
-    }  
+    }
+    
+    /** 
+     * 将数据放入set缓存 
+     * @param key 键 
+     * @param value 值
+     * @return 成功个数 
+     */  
+    public long sSet(String key, String value) {  
+        try {  
+            return redisTemplate.opsForSet().add(key, value);  
+        } catch (Exception e) {  
+            e.printStackTrace();  
+            return 0;  
+        }  
+    }
 
     /** 
      * 将set数据放入缓存 
