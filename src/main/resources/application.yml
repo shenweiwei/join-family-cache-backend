@@ -44,7 +44,7 @@ spring:
 file:
   path:
     linux: /midware/file_temp
-    windows: F:/file_temp
+    windows: E:/file_temp
 ---
 spring:
   profiles: qa

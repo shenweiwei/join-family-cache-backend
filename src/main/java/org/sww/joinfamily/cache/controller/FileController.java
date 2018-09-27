@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.sww.joinfamily.cache.dto.request.FileRequestDto;
 import org.sww.joinfamily.cache.manager.FileManager;
 
 /**
@@ -22,6 +23,12 @@ public class FileController {
 
 	@PostMapping("/upload")
 	public void upload(@RequestParam("file") MultipartFile file) throws IOException {
-		fileManager.upload(file);
+		fileManager.upload(initFileRequestDto(file));
+	}
+	
+	private FileRequestDto initFileRequestDto(MultipartFile file) {
+		FileRequestDto fileRequestDto = new FileRequestDto();
+		fileRequestDto.setFile(file);
+		return fileRequestDto;
 	}
 }
