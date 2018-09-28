@@ -17,9 +17,9 @@ server:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/joinfamily
+    url: jdbc:postgresql://localhost:5432/join-family
     username: postgres
-    password: 384900
+    password: Pass1234
     driverClassName: org.postgresql.Driver
   rabbitmq:
     host: 192.168.1.28
@@ -51,7 +51,7 @@ spring:
 file:
   path:
     linux: /midware/file_temp
-    windows: E:/file_temp
+    windows: F:/file_temp
 ---
 spring:
   profiles: qa

@@ -32,7 +32,7 @@ public class RedisConfig {
 	public RedisTemplate<String, Serializable> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<String, Serializable> template = new RedisTemplate<>();
 		template.setConnectionFactory(redisConnectionFactory);
-		template.setEnableTransactionSupport(true);
+		template.setEnableTransactionSupport(false);
 		// 使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值
 		Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(Object.class);
 		ObjectMapper mapper = new ObjectMapper();

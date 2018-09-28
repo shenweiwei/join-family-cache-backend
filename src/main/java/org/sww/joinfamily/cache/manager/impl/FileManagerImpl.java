@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.sww.joinfamily.cache.constants.FileTypeConstant;
 import org.sww.joinfamily.cache.constants.SystemConstant;
-import org.sww.joinfamily.cache.dto.DataTranDto;
-import org.sww.joinfamily.cache.dto.request.FileRequestDto;
+import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
 import org.sww.joinfamily.cache.manager.FileManager;
 import org.sww.joinfamily.cache.service.FileService;
 import org.sww.joinfamily.cache.utils.DateUtil;
@@ -26,8 +25,8 @@ public class FileManagerImpl implements FileManager {
 	private SystemUtil systemUtil;
 
 	@Override
-	public void upload(DataTranDto<FileRequestDto> fileRequestDto) throws IOException {
-		MultipartFile file = fileRequestDto.builder().getFile();
+	public void upload(FileRequestDTO fileRequestDto) throws IOException {
+		MultipartFile file = fileRequestDto.getFile();
 		String fileName = file.getOriginalFilename();
 		String fileType = fileName.substring(fileName.indexOf("."), fileName.length());
 		switch (fileType.replace(".", "").toUpperCase()) {
