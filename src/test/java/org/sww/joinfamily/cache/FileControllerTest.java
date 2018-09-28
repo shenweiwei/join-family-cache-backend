@@ -18,7 +18,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@WebAppConfiguration
 public class FileControllerTest {
 	@Autowired
 	private WebApplicationContext context;
