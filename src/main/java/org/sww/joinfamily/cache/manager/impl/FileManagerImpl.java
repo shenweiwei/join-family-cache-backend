@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.sww.framework.transfer.http.dto.HttpDataTransferObject;
 import org.sww.joinfamily.cache.constants.FileTypeConstant;
 import org.sww.joinfamily.cache.constants.SystemConstant;
 import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
@@ -25,8 +26,8 @@ public class FileManagerImpl implements FileManager {
 	private SystemUtil systemUtil;
 
 	@Override
-	public void upload(FileRequestDTO fileRequestDto) throws IOException {
-		MultipartFile file = fileRequestDto.getFile();
+	public void upload(HttpDataTransferObject httpDataTransferObject) throws IOException {
+		MultipartFile file = ((FileRequestDTO) httpDataTransferObject.getHttpRequestDTO()).getFile();
 		String fileName = file.getOriginalFilename();
 		String fileType = fileName.substring(fileName.indexOf("."), fileName.length());
 		switch (fileType.replace(".", "").toUpperCase()) {
@@ -37,13 +38,11 @@ public class FileManagerImpl implements FileManager {
 				throw new ValidationException("file type not support upload");
 		}
 	}
-	
 	private void uploadPicture(MultipartFile file, String fileType) throws IOException {
 		String floder = this.createFolder(SystemConstant.PICTURE);
 		String filePath = fileService.savePictureToLocal(file, floder, fileType);
 		fileService.savePictureToRedis(file, fileType, filePath);
 	}
-	
 	private String createFolder(String filePath) throws IOException {
 		String envFilePath;
 		switch (filePath) {
