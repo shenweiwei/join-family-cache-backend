@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.sww.framework.transfer.http.builder.HttpDataTranObjectBuilder;
 import org.sww.framework.transfer.http.dto.HttpDataTransferObject;
-import org.sww.framework.transfer.http.dto.HttpRequestDTO;
 import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
 import org.sww.joinfamily.cache.dto.response.FileResponseDTO;
 import org.sww.joinfamily.cache.manager.FileManager;
