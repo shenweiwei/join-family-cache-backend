@@ -1,6 +1,6 @@
 package org.sww.joinfamily.cache.dto.response;
 
-import org.sww.joinfamily.cache.dto.ResposneDTO;
+import org.sww.framework.transfer.http.dto.HttpResposneDTO;
 
-public class FileResponseDTO extends ResposneDTO{
+public class FileResponseDTO extends HttpResposneDTO{
 }
