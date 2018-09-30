@@ -1,16 +1,18 @@
 package org.sww.joinfamily.cache.controller;
 
-import java.io.IOException;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.sww.framework.transfer.http.builder.HttpDataTranObjectBuilder;
+import org.sww.framework.transfer.http.dto.AsyncHttpResponseDTO;
 import org.sww.framework.transfer.http.dto.HttpDataTransferObject;
 import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
 import org.sww.joinfamily.cache.dto.response.FileResponseDTO;
@@ -27,16 +29,22 @@ public class FileController {
 	@Autowired
 	private FileManager fileManager;
 
+	@Async
 	@PostMapping("/upload")
-	public void upload(@RequestParam("file") MultipartFile file) throws IOException {
-		fileManager.upload(this.initFileRequestDto(file));
-	}
-	private HttpDataTransferObject initFileRequestDto(MultipartFile file) {
+	public Future<AsyncHttpResponseDTO> upload(@RequestParam("file") MultipartFile file) throws Exception {
 		HttpDataTransferObject httpDataTransferObject = HttpDataTranObjectBuilder
 				.builder(FileRequestDTO.class, FileResponseDTO.class).build();
+		
+		fileManager.upload(initFileRequestDto(httpDataTransferObject, file));
+		
+		return ((AsyncHttpResponseDTO) httpDataTransferObject.getOutputDTO()).getFuture();
+	}
+	
+	private HttpDataTransferObject initFileRequestDto(HttpDataTransferObject httpDataTransferObject,
+			MultipartFile file) {
 		FileRequestDTO fileRequestDto = new FileRequestDTO();
 		fileRequestDto.setFile(file);
-		httpDataTransferObject.setHttpRequestDTO(fileRequestDto);
+		httpDataTransferObject.setInputDTO(fileRequestDto);
 		return httpDataTransferObject;
 	}
 }
