@@ -60,7 +60,7 @@ public class FileManagerImpl implements FileManager {
 				break;
 		}
 		String sysdateFolder = DateUtil.getCurrentDateString();
-		String folder = envFilePath.concat("/").concat(sysdateFolder);
+		String folder = envFilePath.concat(sysdateFolder);
 		FileUtils.forceMkdir(new File(folder));
 		return folder;
 	}

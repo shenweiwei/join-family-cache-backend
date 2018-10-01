@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.sww.framework.transfer.http.builder.HttpDataTranObjectBuilder;
+import org.sww.framework.transfer.http.builder.AsyncHttpDataTranObjectBuilder;
 import org.sww.framework.transfer.http.dto.AsyncHttpResponseDTO;
 import org.sww.framework.transfer.http.dto.HttpDataTransferObject;
 import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
@@ -32,7 +32,7 @@ public class FileController {
 	@Async
 	@PostMapping("/upload")
 	public Future<AsyncHttpResponseDTO> upload(@RequestParam("file") MultipartFile file) throws Exception {
-		HttpDataTransferObject httpDataTransferObject = HttpDataTranObjectBuilder
+		HttpDataTransferObject httpDataTransferObject = AsyncHttpDataTranObjectBuilder
 				.builder(FileRequestDTO.class, FileResponseDTO.class).build();
 		
 		fileManager.upload(initFileRequestDto(httpDataTransferObject, file));

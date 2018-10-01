@@ -103,6 +103,7 @@
 
 	<logger name="org.springframework" level="INFO" />
 	<logger name="com.netflix" level="WARN" />
+	<logger name="org.sww" level="DEBUG" />
 	<logger name="org" level="INFO" />
 	<logger name="springfox.documentation" level="INFO" />
 </configuration>

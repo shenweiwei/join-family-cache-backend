@@ -14,12 +14,15 @@ server:
   servlet:
     context-path: /jf/cache
 ---
+server:
+  tomcat:
+    basedir: F:/file_temp/
 spring:
   profiles: dev
   datasource:
-    url: jdbc:postgresql://localhost:5432/joinfamily
+    url: jdbc:postgresql://localhost:5432/join-family
     username: postgres
-    password: 384900
+    password: Pass1234
     driverClassName: org.postgresql.Driver
   rabbitmq:
     host: 192.168.1.28
@@ -50,8 +53,8 @@ spring:
     timeout: 60000
 file:
   path:
-    linux: /midware/file_temp
-    windows: E:/file_temp
+    linux: /midware/file_temp/
+    windows: F:/file_temp/
 ---
 spring:
   profiles: qa
