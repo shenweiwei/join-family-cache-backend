@@ -41,8 +41,6 @@ public class FileManagerImpl implements FileManager {
 			default:
 				throw new ValidationException("file type not support upload");
 		}
-		
-		httpDataTransferObject.transferFinish();
 	}
 	private void uploadPicture(MultipartFile file, String fileType) throws IOException {
 		String floder = createFolder(SystemConstant.PICTURE);
