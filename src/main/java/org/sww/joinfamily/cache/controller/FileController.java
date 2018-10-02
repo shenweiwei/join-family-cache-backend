@@ -34,17 +34,15 @@ public class FileController {
 	public Future<AsyncHttpResponseDTO> upload(@RequestParam("file") MultipartFile file) throws Exception {
 		HttpDataTransferObject httpDataTransferObject = AsyncHttpDataTranObjectBuilder
 				.builder(FileRequestDTO.class, FileResponseDTO.class).build();
-		
 		fileManager.upload(initFileRequestDto(httpDataTransferObject, file));
-		
 		return ((AsyncHttpResponseDTO) httpDataTransferObject.getOutputDTO()).getFuture();
 	}
-	
 	private HttpDataTransferObject initFileRequestDto(HttpDataTransferObject httpDataTransferObject,
 			MultipartFile file) {
 		FileRequestDTO fileRequestDto = new FileRequestDTO();
 		fileRequestDto.setFile(file);
 		httpDataTransferObject.setInputDTO(fileRequestDto);
+		httpDataTransferObject.setInputWatch(true);
 		return httpDataTransferObject;
 	}
 }

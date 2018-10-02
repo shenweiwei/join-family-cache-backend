@@ -14,9 +14,6 @@ server:
   servlet:
     context-path: /jf/cache
 ---
-server:
-  tomcat:
-    basedir: F:/file_temp/
 spring:
   profiles: dev
   datasource:

@@ -1,21 +1,30 @@
 package org.sww.joinfamily.cache.config;
 
+import java.io.File;
+
 import javax.servlet.MultipartConfigElement;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.sww.joinfamily.cache.utils.SystemUtil;
 
 @Configuration
 public class WebMvcConfig {
-	@Autowired
-	private SystemUtil systemUtil;
+	// @Value("${}")
+	// private String loaction;
 	@Bean
 	public MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
-		factory.setLocation(systemUtil.getPicturePathBySysEnv());
+		// 文件最大
+		factory.setMaxFileSize("30MB");
+		// 设置总上传数据总大小
+		factory.setMaxRequestSize("30MB");
+		String location = System.getProperty("user.dir") + "/data/tmp";
+		File tmpFile = new File(location);
+		if (!tmpFile.exists()) {
+			tmpFile.mkdirs();
+		}
+		factory.setLocation(location);
 		return factory.createMultipartConfig();
 	}
 }
