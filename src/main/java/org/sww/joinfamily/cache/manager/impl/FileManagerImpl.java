@@ -9,12 +9,14 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.sww.framework.transfer.http.dto.HttpDataTransferObject;
+import org.sww.framework.transfer.http.dto.AsyncHttpDataTransferObject;
 import org.sww.joinfamily.cache.constants.FileTypeConstant;
 import org.sww.joinfamily.cache.constants.SystemConstant;
 import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
+import org.sww.joinfamily.cache.dto.response.FileResponseDTO;
 import org.sww.joinfamily.cache.manager.FileManager;
 import org.sww.joinfamily.cache.service.FileService;
 import org.sww.joinfamily.cache.utils.DateUtil;
@@ -29,9 +31,10 @@ public class FileManagerImpl implements FileManager {
 	@Autowired
 	private SystemUtil systemUtil;
 
+	@Async
 	@Override
-	public void upload(HttpDataTransferObject httpDataTransferObject) throws Exception {
-		MultipartFile file = ((FileRequestDTO) httpDataTransferObject.getInputDTO()).getFile();
+	public void upload(AsyncHttpDataTransferObject<FileRequestDTO, FileResponseDTO> asyncHttpDataTransferObject) throws Exception {
+		MultipartFile file = ((FileRequestDTO)asyncHttpDataTransferObject.getInputDTO()).getFile();
 		String fileName = file.getOriginalFilename();
 		String fileType = fileName.substring(fileName.indexOf("."), fileName.length());
 		switch (fileType.replace(".", "").toUpperCase()) {
@@ -41,6 +44,7 @@ public class FileManagerImpl implements FileManager {
 			default:
 				throw new ValidationException("file type not support upload");
 		}
+		asyncHttpDataTransferObject.getDeferredResult().setResult((FileResponseDTO) asyncHttpDataTransferObject.getOutputDTO());
 	}
 	private void uploadPicture(MultipartFile file, String fileType) throws IOException {
 		String floder = createFolder(SystemConstant.PICTURE);

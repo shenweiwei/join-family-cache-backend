@@ -1,7 +1,5 @@
 package org.sww.joinfamily.cache.controller;
 
-import java.util.concurrent.Callable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.async.WebAsyncTask;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 import org.sww.framework.transfer.http.builder.AsyncHttpDataTranObjectBuilder;
-import org.sww.framework.transfer.http.dto.HttpDataTransferObject;
+import org.sww.framework.transfer.http.dto.AsyncHttpDataTransferObject;
+import org.sww.framework.transfer.http.dto.AsyncHttpResponseDTO;
 import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
 import org.sww.joinfamily.cache.dto.response.FileResponseDTO;
 import org.sww.joinfamily.cache.manager.FileManager;
@@ -29,26 +28,19 @@ public class FileController {
 	private FileManager fileManager;
 
 	@PostMapping("/upload")
-	public WebAsyncTask<String> upload(@RequestParam("file") MultipartFile file) throws Exception {
-		HttpDataTransferObject httpDataTransferObject = AsyncHttpDataTranObjectBuilder
+	public DeferredResult<AsyncHttpResponseDTO<FileResponseDTO>> upload(@RequestParam("file") MultipartFile file)
+			throws Exception {
+		AsyncHttpDataTransferObject<FileRequestDTO, FileResponseDTO> asyncHttpDataTransferObject = AsyncHttpDataTranObjectBuilder
 				.builder(FileRequestDTO.class, FileResponseDTO.class).build();
-		fileManager.upload(initFileRequestDto(httpDataTransferObject, file));
-		
-		WebAsyncTask<String> result = new WebAsyncTask<String>(60 * 1000L, new Callable<String>() {
-			@Override
-			public String call() throws Exception {
-				return "WebAsyncTask!!!";
-			}
-		});
-		
-		return result;
+		fileManager.upload(initFileRequestDto(asyncHttpDataTransferObject, file));
+		return asyncHttpDataTransferObject.getDeferredResult();
 	}
-	private HttpDataTransferObject initFileRequestDto(HttpDataTransferObject httpDataTransferObject,
-			MultipartFile file) {
+	private AsyncHttpDataTransferObject<FileRequestDTO, FileResponseDTO> initFileRequestDto(
+			AsyncHttpDataTransferObject<FileRequestDTO, FileResponseDTO> asyncHttpDataTransferObject, MultipartFile file) {
 		FileRequestDTO fileRequestDto = new FileRequestDTO();
 		fileRequestDto.setFile(file);
-		httpDataTransferObject.setInputDTO(fileRequestDto);
-		httpDataTransferObject.setInputWatch(true);
-		return httpDataTransferObject;
+		asyncHttpDataTransferObject.setInputDTO(fileRequestDto);
+		asyncHttpDataTransferObject.setInputWatch(true);
+		return asyncHttpDataTransferObject;
 	}
 }
