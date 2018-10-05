@@ -11,9 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync ;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor ;
 import org.sww.framework.transfer.exception.TransferException ;
 import org.sww.framework.transfer.http.dto.AsyncHttpDataTransferObject ;
-import org.sww.joinfamily.cache.exception.BusinessException ;
-import org.sww.joinfamily.cache.exception.RedisException ;
-import org.sww.joinfamily.cache.exception.RequestException ;
+import org.sww.joinfamily.cache.exception.JfcacheException ;
 
 @EnableAsync
 @Configuration
@@ -49,21 +47,16 @@ public class AsyncConfig implements AsyncConfigurer {
 	}
 	
 	private TransferException initTransferExcetpionByType(Throwable throwable) {
-		if (throwable instanceof RedisException) {
-			RedisException exception = ((RedisException) throwable) ;
-			return TransferException.create(exception.getMessage(), exception.getCode()) ;
-		} else if (throwable instanceof RequestException) {
-			RequestException exception = ((RequestException) throwable) ;
-			return TransferException.create(exception.getMessage(), exception.getCode()) ;
-		} else if (throwable instanceof BusinessException) {
-			BusinessException exception = ((BusinessException) throwable) ;
-			return TransferException.create(exception.getMessage(), exception.getCode()) ;
+		JfcacheException exception = new JfcacheException(throwable) ;
+		if (throwable instanceof JfcacheException) {
+			exception.setCode(exception.getCode()) ;
 		} else if (throwable instanceof ValidationException) {
-			ValidationException exception = ((ValidationException) throwable) ;
-			return TransferException.create(exception.getMessage(), "400") ;
+			exception.setCode("400") ;
 		} else {
-			return TransferException.create(null, null) ;
+			exception.setCode("500") ;
 		}
+		
+		return TransferException.create(exception.getMessage(), exception.getCode()) ;
 	}
 	
 }
