@@ -3,7 +3,7 @@ package org.sww.joinfamily.cache.dto.request;
 import org.springframework.web.multipart.MultipartFile;
 import org.sww.framework.transfer.http.dto.AsyncHttpRequestDTO;
 
-public class FileRequestDTO extends AsyncHttpRequestDTO<FileRequestDTO> {
+public class FileRequestDTO extends AsyncHttpRequestDTO {
 	private MultipartFile file;
 
 	public MultipartFile getFile() {

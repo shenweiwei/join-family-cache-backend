@@ -1,69 +1,84 @@
-package org.sww.joinfamily.cache.manager.impl;
+package org.sww.joinfamily.cache.manager.impl ;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.validation.ValidationException;
-
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-import org.sww.framework.transfer.http.dto.AsyncHttpDataTransferObject;
-import org.sww.joinfamily.cache.constants.FileTypeConstant;
-import org.sww.joinfamily.cache.constants.SystemConstant;
-import org.sww.joinfamily.cache.dto.request.FileRequestDTO;
-import org.sww.joinfamily.cache.dto.response.FileResponseDTO;
-import org.sww.joinfamily.cache.manager.FileManager;
-import org.sww.joinfamily.cache.service.FileService;
-import org.sww.joinfamily.cache.utils.DateUtil;
-import org.sww.joinfamily.cache.utils.SystemUtil;
+import java.io.IOException ;
+import javax.validation.ValidationException ;
+import org.slf4j.Logger ;
+import org.slf4j.LoggerFactory ;
+import org.springframework.beans.factory.annotation.Autowired ;
+import org.springframework.scheduling.annotation.Async ;
+import org.springframework.stereotype.Component ;
+import org.springframework.web.multipart.MultipartFile ;
+import org.sww.framework.transfer.http.dto.AsyncHttpDataTransferObject ;
+import org.sww.joinfamily.cache.constants.FileTypeConstant ;
+import org.sww.joinfamily.cache.constants.SystemConstant ;
+import org.sww.joinfamily.cache.dto.request.FileRequestDTO ;
+import org.sww.joinfamily.cache.exception.RequestException ;
+import org.sww.joinfamily.cache.manager.FileManager ;
+import org.sww.joinfamily.cache.service.FileService ;
+import org.sww.joinfamily.cache.service.FolderService ;
 
 @Component
 public class FileManagerImpl implements FileManager {
-	protected static Logger logger = LoggerFactory.getLogger(FileManagerImpl.class);
+	
+	protected static Logger	logger	= LoggerFactory.getLogger(FileManagerImpl.class) ;
+	@Autowired
+	private FileService			fileService ;
 	
 	@Autowired
-	private FileService fileService;
-	@Autowired
-	private SystemUtil systemUtil;
-
+	private FolderService		folderService ;
+	
 	@Async
 	@Override
-	public void upload(AsyncHttpDataTransferObject<FileRequestDTO, FileResponseDTO> asyncHttpDataTransferObject) throws Exception {
-		MultipartFile file = ((FileRequestDTO)asyncHttpDataTransferObject.getInputDTO()).getFile();
-		String fileName = file.getOriginalFilename();
-		String fileType = fileName.substring(fileName.indexOf("."), fileName.length());
+	public void upload(AsyncHttpDataTransferObject asyncHttpDataTransferObject) {
+		MultipartFile file = ((FileRequestDTO) asyncHttpDataTransferObject.getInputDTO()).getFile() ;
+		String fileName = file.getOriginalFilename() ;
+		String fileType = fileName.substring(fileName.indexOf("."), fileName.length()) ;
+		try {
+			uploadByFileType(file, fileType) ;
+		} catch (Exception e) {
+			throw new RequestException(e.getMessage(), e) ;
+		}
+		asyncHttpDataTransferObject.transferFinish() ;
+	}
+	
+	/**
+	 * 根据文件类型上传文件
+	 * @author: Administrator
+	 * @date: 2018年10月5日 下午9:04:53
+	 * @Title: uploadByFileType
+	 * @Description: TODO
+	 * @param file
+	 * @param fileType
+	 * @throws IOException
+	 * @return void
+	 * @throws
+	 */
+	private void uploadByFileType(MultipartFile file, String fileType) throws IOException {
 		switch (fileType.replace(".", "").toUpperCase()) {
 			case FileTypeConstant.PNG:
-				this.uploadPicture(file, fileType);
-				break;
+				this.uploadPicture(file, fileType) ;
+				break ;
 			default:
-				throw new ValidationException("file type not support upload");
+				throw new ValidationException("file type not support upload") ;
 		}
-		asyncHttpDataTransferObject.getDeferredResult().setResult((FileResponseDTO) asyncHttpDataTransferObject.getOutputDTO());
 	}
+	
+	/**
+	 * 上传图片
+	 * @author: Administrator
+	 * @date: 2018年10月5日 下午9:05:36
+	 * @Title: uploadPicture
+	 * @Description: TODO
+	 * @param file
+	 * @param fileType
+	 * @throws IOException
+	 * @return void
+	 * @throws
+	 */
 	private void uploadPicture(MultipartFile file, String fileType) throws IOException {
-		String floder = createFolder(SystemConstant.PICTURE);
-		String filePath = fileService.savePictureToLocal(file, floder, fileType);
-		fileService.savePictureToRedis(file, fileType, filePath);
+		String floder = folderService.createFolder(SystemConstant.PICTURE) ;
+		String filePath = fileService.savePictureToLocal(file, floder, fileType) ;
+		fileService.savePictureToRedis(file, fileType, filePath) ;
 	}
-	private String createFolder(String filePath) throws IOException {
-		String envFilePath;
-		switch (filePath) {
-			case SystemConstant.PICTURE:
-				envFilePath = systemUtil.getPicturePathBySysEnv();
-				break;
-			default:
-				envFilePath = systemUtil.getFilePathBySysEnv();
-				break;
-		}
-		String sysdateFolder = DateUtil.getCurrentDateString();
-		String folder = envFilePath.concat(sysdateFolder);
-		FileUtils.forceMkdir(new File(folder));
-		return folder;
-	}
+	
 }
