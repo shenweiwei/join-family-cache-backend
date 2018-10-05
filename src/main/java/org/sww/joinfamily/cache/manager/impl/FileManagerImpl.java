@@ -1,6 +1,5 @@
 package org.sww.joinfamily.cache.manager.impl ;
 
-import java.io.IOException ;
 import javax.validation.ValidationException ;
 import org.slf4j.Logger ;
 import org.slf4j.LoggerFactory ;
@@ -8,11 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired ;
 import org.springframework.scheduling.annotation.Async ;
 import org.springframework.stereotype.Component ;
 import org.springframework.web.multipart.MultipartFile ;
+import org.sww.framework.transfer.exception.TransferException ;
 import org.sww.framework.transfer.http.dto.AsyncHttpDataTransferObject ;
 import org.sww.joinfamily.cache.constants.FileTypeConstant ;
 import org.sww.joinfamily.cache.constants.SystemConstant ;
 import org.sww.joinfamily.cache.dto.request.FileRequestDTO ;
-import org.sww.joinfamily.cache.exception.RequestException ;
+import org.sww.joinfamily.cache.exception.RedisException ;
 import org.sww.joinfamily.cache.manager.FileManager ;
 import org.sww.joinfamily.cache.service.FileService ;
 import org.sww.joinfamily.cache.service.FolderService ;
@@ -33,11 +33,7 @@ public class FileManagerImpl implements FileManager {
 		MultipartFile file = ((FileRequestDTO) asyncHttpDataTransferObject.getInputDTO()).getFile() ;
 		String fileName = file.getOriginalFilename() ;
 		String fileType = fileName.substring(fileName.indexOf("."), fileName.length()) ;
-		try {
-			uploadByFileType(file, fileType) ;
-		} catch (Exception e) {
-			throw new RequestException(e.getMessage(), e) ;
-		}
+		uploadByFileType(file, fileType) ;
 		asyncHttpDataTransferObject.transferFinish() ;
 	}
 	
@@ -53,7 +49,7 @@ public class FileManagerImpl implements FileManager {
 	 * @return void
 	 * @throws
 	 */
-	private void uploadByFileType(MultipartFile file, String fileType) throws IOException {
+	private void uploadByFileType(MultipartFile file, String fileType) {
 		switch (fileType.replace(".", "").toUpperCase()) {
 			case FileTypeConstant.PNG:
 				this.uploadPicture(file, fileType) ;
@@ -75,7 +71,7 @@ public class FileManagerImpl implements FileManager {
 	 * @return void
 	 * @throws
 	 */
-	private void uploadPicture(MultipartFile file, String fileType) throws IOException {
+	private void uploadPicture(MultipartFile file, String fileType) {
 		String floder = folderService.createFolder(SystemConstant.PICTURE) ;
 		String filePath = fileService.savePictureToLocal(file, floder, fileType) ;
 		fileService.savePictureToRedis(file, fileType, filePath) ;

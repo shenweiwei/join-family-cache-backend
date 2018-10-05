@@ -28,10 +28,8 @@ public class FileController {
 	private FileManager fileManager;
 
 	@PostMapping("/upload")
-	public DeferredResult<AsyncHttpResponseDTO> upload(@RequestParam("file") MultipartFile file)
-			throws Exception {
-		AsyncHttpDataTransferObject asyncHttpDataTransferObject = AsyncHttpDataTranObjectBuilder.builder(FileRequestDTO.class, FileResponseDTO.class).build();
-				
+	public DeferredResult<AsyncHttpResponseDTO> upload(@RequestParam("file") MultipartFile file) {
+		AsyncHttpDataTransferObject asyncHttpDataTransferObject = AsyncHttpDataTranObjectBuilder.builder(FileRequestDTO.class, FileResponseDTO.class).build();	
 		fileManager.upload(initFileRequestDto(asyncHttpDataTransferObject, file));
 		return asyncHttpDataTransferObject.getDeferredResult();
 	}

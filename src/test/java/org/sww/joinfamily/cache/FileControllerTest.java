@@ -2,7 +2,6 @@ package org.sww.joinfamily.cache;
 
 import java.io.File;
 import java.io.FileInputStream;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.sww.joinfamily.cache.controller.FileController;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

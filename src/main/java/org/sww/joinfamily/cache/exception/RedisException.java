@@ -3,7 +3,7 @@ package org.sww.joinfamily.cache.exception ;
 public class RedisException extends io.lettuce.core.RedisException {
 	
 	private static final long	serialVersionUID	= 1288574372982008787L ;
-	private String						code ;
+	private String						code							= "500" ;
 	
 	public RedisException(String message) {
 		super(message) ;

@@ -40,15 +40,14 @@ public class FileServiceImpl implements FileService {
 	
 	@Override
 	public void savePictureToRedis(MultipartFile file, String fileType, String filePath) {
-		long result = 0 ;
-		
 		try {
-			result = redisUtil.sSet(RedisConstant.PICTURE_UNSAVED_SET, filePath) ;
+			long result = redisUtil.sSet(RedisConstant.PICTURE_UNSAVED_SET, filePath) ;
+			
+			if (result <= 0) throw new RedisException("INSERT TO REDIS ERROR") ;
 		} catch (io.lettuce.core.RedisException e) {
-			throw new RedisException("INSERT TO REDIS ERROR") ;
+			throw new RedisException(e.getMessage(), e) ;
 		}
 		
-		if (result <= 0) throw new RedisException("INSERT TO REDIS ERROR") ;
 	}
 	
 	@Override
