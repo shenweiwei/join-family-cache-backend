@@ -73,6 +73,7 @@ public class FileManagerImpl implements FileManager {
 		String floder = folderService.createFolder(SystemConstant.PICTURE) ;
 		String filePath = fileService.savePictureToLocal(file, floder, fileType) ;
 		fileService.savePictureToRedis(file, fileType, filePath) ;
+		fileService.saveToDB();
 	}
 	
 }

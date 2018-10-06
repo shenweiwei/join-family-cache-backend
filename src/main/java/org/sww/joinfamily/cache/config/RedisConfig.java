@@ -1,16 +1,15 @@
 package org.sww.joinfamily.cache.config;
 
 import java.io.Serializable;
-
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories ;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Configuration
 @AutoConfigureAfter(RedisAutoConfiguration.class)
+@EnableRedisRepositories
 public class RedisConfig {
 
 	/**
@@ -47,5 +47,4 @@ public class RedisConfig {
 		template.afterPropertiesSet();
 		return template;
 	}
-	
 }
