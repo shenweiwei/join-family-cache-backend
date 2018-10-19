@@ -72,7 +72,7 @@ public class FileManagerImpl implements FileManager {
 	private void uploadPicture(MultipartFile file, String fileType) {
 		String floder = folderService.createFolder(SystemConstant.PICTURE) ;
 		String filePath = fileService.savePictureToLocal(file, floder, fileType) ;
-		fileService.savePicture(file, fileType, filePath) ;
+		fileService.savePictureToRedis(file, fileType, filePath) ;
 	}
 	
 }

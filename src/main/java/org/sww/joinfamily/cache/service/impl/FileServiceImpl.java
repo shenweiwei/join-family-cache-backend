@@ -14,7 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.sww.joinfamily.cache.exception.RedisException;
 import org.sww.joinfamily.cache.exception.RequestException;
 import org.sww.joinfamily.cache.po.Picture;
-import org.sww.joinfamily.cache.repository.PictureRepository;
+import org.sww.joinfamily.cache.po.redis.PictureSaved;
+import org.sww.joinfamily.cache.repository.redis.PicutreSavedRepository;
 import org.sww.joinfamily.cache.service.FileService;
 
 @Service
@@ -24,7 +25,7 @@ public class FileServiceImpl implements FileService {
 	protected final static Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
 	@Autowired
-	private PictureRepository pictureRepository;
+	private PicutreSavedRepository picutreSavedRepository;
 
 	@Override
 	public String savePictureToLocal(MultipartFile multipartfile, String folder, String fileType) {
@@ -40,10 +41,11 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public void savePicture(MultipartFile file, String fileType, String filePath) {
+	public void savePictureToRedis(MultipartFile file, String fileType, String filePath) {
 		try {
-			Picture result = pictureRepository
-					.save(picture(filePath, file.getOriginalFilename(), fileType.substring(1, fileType.length())));
+//			Picture result = pictureRepository
+//					.save(picture(filePath, file.getOriginalFilename(), fileType.substring(1, fileType.length())));
+			PictureSaved result = picutreSavedRepository.save(pictureSaved(filePath, file.getOriginalFilename(), fileType.substring(1, fileType.length())));
 			if (ObjectUtils.isEmpty(result))
 				throw new RedisException("INSERT TO REDIS ERROR");
 		} catch (io.lettuce.core.RedisException e) {
@@ -52,13 +54,21 @@ public class FileServiceImpl implements FileService {
 
 	}
 
-	private Picture picture(String filePath, String fileName, String suffixName) {
-		Picture result = new Picture();
+//	private Picture picture(String filePath, String fileName, String suffixName) {
+//		Picture result = new Picture();
+//		result.setFilePath(filePath);
+//		result.setName(fileName);
+//		result.setSuffixName(suffixName);
+//
+//		return result;
+//	}
+
+	private PictureSaved pictureSaved(String filePath, String fileName, String suffixName) {
+		PictureSaved result = new PictureSaved();
 		result.setFilePath(filePath);
 		result.setName(fileName);
 		result.setSuffixName(suffixName);
 
 		return result;
 	}
-
 }
