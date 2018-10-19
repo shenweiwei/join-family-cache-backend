@@ -23,7 +23,7 @@ public interface FileService {
 	public String savePictureToLocal(MultipartFile file, String folder, String fileType);
 	
 	/**
-	 * 保存文件到redis
+	 * 保存文件到redis和DB
 	 * @author: Administrator
 	 * @date: 2018年9月25日 下午9:10:14
 	 * @Title: savePictureToRedis
@@ -34,6 +34,5 @@ public interface FileService {
 	 * @return void
 	 * @throws
 	 */
-	public void savePictureToRedis(MultipartFile file, String fileType, String filePath);
-	public void saveToDB();
+	public void savePicture(MultipartFile file, String fileType, String filePath);
 }

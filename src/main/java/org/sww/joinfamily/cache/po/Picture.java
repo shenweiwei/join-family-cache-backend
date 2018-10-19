@@ -1,6 +1,7 @@
 package org.sww.joinfamily.cache.po ;
 
 import java.io.Serializable ;
+
 import javax.persistence.Column ;
 import javax.persistence.Entity ;
 import javax.persistence.GeneratedValue ;
@@ -9,11 +10,14 @@ import javax.persistence.Id ;
 import javax.persistence.JoinColumn ;
 import javax.persistence.ManyToOne ;
 import javax.persistence.Table ;
+
+import org.springframework.data.redis.core.RedisHash;
+
 import com.fasterxml.jackson.annotation.JsonBackReference ;
 
 @Entity(name = "picture")
 @Table(name = "tm_picture_info")
-//@RedisHash("picture")
+@RedisHash("picture")
 public class Picture extends BasePo implements Serializable {
 	
 	private static final long	serialVersionUID	= -8004507093185207036L ;
